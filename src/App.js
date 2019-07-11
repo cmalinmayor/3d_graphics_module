@@ -32,13 +32,14 @@ class App extends Component{
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setClearColor(0x000000)
     this.renderer.setSize(width, height)
+    this.renderer.shadowMap.enabled = true;
     this.mount.appendChild(this.renderer.domElement)
     
     //ADD PLANE
     var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
     var planeMaterial = new material( { color: 0xb69a77, side: THREE.DoubleSide } );
     var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-    plane.recieveShadow = true;
+    plane.receiveShadow = true;
     this.scene.add( plane );
       
     //ADD CUBE
@@ -46,7 +47,7 @@ class App extends Component{
     const cubeMaterial = new material({ color: '#433F81' })
     this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
     this.cube.position.z = 2
-    this.cube.recieveShadow = true
+    this.cube.receiveShadow = true
     this.cube.castShadow = true
     this.scene.add(this.cube)
     
@@ -54,16 +55,16 @@ class App extends Component{
     var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new material({color: 0xFFFFFF}))
     sphere.position.set(1, 1, 0);
     sphere.castShadow = true
-    sphere.recieveShadow = true
+    sphere.receiveShadow = true
     this.scene.add(sphere)
     
     //ADD AMBIENT LIGHT
-    var alight = new THREE.AmbientLight( 0xFFFFFF, 0.6 );
+    var alight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
     this.scene.add(alight);
     
-    //ADD DIRECTIONAL LIGHT
-    var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
-    light.position.set(10, -10, 10);
+    //ADD POINT LIGHT
+    var light = new THREE.PointLight( 0xFFFFFF, 1 );
+    light.position.set(1, -5, 10);
     light.castShadow = true;
     this.scene.add(light);
     
