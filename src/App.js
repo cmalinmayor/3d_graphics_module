@@ -26,6 +26,8 @@ class App extends Component{
     this.camera.position.z = 9
     this.camera.lookAt(0, 0, 0)
 
+    var material = THREE.MeshLambertMaterial
+
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setClearColor(0x000000)
@@ -34,21 +36,25 @@ class App extends Component{
     
     //ADD PLANE
     var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
-    var planeMaterial = new THREE.MeshBasicMaterial( { color: 0xb69a77, side: THREE.DoubleSide } );
+    var planeMaterial = new material( { color: 0xb69a77, side: THREE.DoubleSide } );
     var plane = new THREE.Mesh( planeGeometry, planeMaterial );
     this.scene.add( plane );
       
     //ADD CUBE
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ color: '#433F81' })
-    this.cube = new THREE.Mesh(geometry, material)
+    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
+    const cubeMaterial = new material({ color: '#433F81' })
+    this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
     this.cube.position.z = 2
     this.scene.add(this.cube)
     
     //ADD SPHERE
-    var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new THREE.MeshBasicMaterial({color: 0xFFFFFF}))
+    var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new material({color: 0xFFFFFF}))
     sphere.position.set(1, 1, 0);
     this.scene.add(sphere)
+    
+    //ADD AMBIENT LIGHT
+    var alight = new THREE.AmbientLight( 0xFFFFFF, 0.6 );
+    this.scene.add(alight);
     
     this.start()
   }
