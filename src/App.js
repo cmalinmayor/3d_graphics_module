@@ -38,6 +38,7 @@ class App extends Component{
     var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
     var planeMaterial = new material( { color: 0xb69a77, side: THREE.DoubleSide } );
     var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.recieveShadow = true;
     this.scene.add( plane );
       
     //ADD CUBE
@@ -45,17 +46,28 @@ class App extends Component{
     const cubeMaterial = new material({ color: '#433F81' })
     this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
     this.cube.position.z = 2
+    this.cube.recieveShadow = true
+    this.cube.castShadow = true
     this.scene.add(this.cube)
     
     //ADD SPHERE
     var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new material({color: 0xFFFFFF}))
     sphere.position.set(1, 1, 0);
+    sphere.castShadow = true
+    sphere.recieveShadow = true
     this.scene.add(sphere)
     
     //ADD AMBIENT LIGHT
     var alight = new THREE.AmbientLight( 0xFFFFFF, 0.6 );
     this.scene.add(alight);
     
+    //ADD DIRECTIONAL LIGHT
+    var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+    light.position.set(10, -10, 10);
+    light.castShadow = true;
+    this.scene.add(light);
+    
+    //START ANIMATION
     this.start()
   }
   componentWillUnmount(){
