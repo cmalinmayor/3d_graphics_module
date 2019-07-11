@@ -5,6 +5,7 @@ import * as THREE from 'three-full';
 class App extends Component{
    constructor(props) {
     super(props)
+    this.rotation = 0
     this.mount = React.createRef()
   }
 
@@ -22,9 +23,7 @@ class App extends Component{
       0.1,
       1000
     )
-    this.camera.position.z = 5
-    this.camera.position.y = 2
-    this.camera.position.y = 3
+    this.camera.position.z = 9
     this.camera.lookAt(0, 0, 0)
 
     //ADD RENDERER
@@ -33,11 +32,23 @@ class App extends Component{
     this.renderer.setSize(width, height)
     this.mount.appendChild(this.renderer.domElement)
     
+    //ADD PLANE
+    var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
+    var planeMaterial = new THREE.MeshBasicMaterial( { color: 0xb69a77, side: THREE.DoubleSide } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    this.scene.add( plane );
+      
     //ADD CUBE
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: '#433F81' })
     this.cube = new THREE.Mesh(geometry, material)
+    this.cube.position.z = 2
     this.scene.add(this.cube)
+    
+    //ADD SPHERE
+    var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new THREE.MeshBasicMaterial({color: 0xFFFFFF}))
+    sphere.position.set(1, 1, 0);
+    this.scene.add(sphere)
     
     this.start()
   }
@@ -54,8 +65,9 @@ class App extends Component{
     cancelAnimationFrame(this.frameId)
   }
   animate = () => {
-    this.cube.rotation.x += 0.01
-    this.cube.rotation.y += 0.01
+    this.rotation += 0.01
+    this.camera.position.x = Math.sin(this.rotation)
+    this.camera.position.y = Math.cos(this.rotation)
     this.renderScene()
     this.frameId = window.requestAnimationFrame(this.animate)
   }
