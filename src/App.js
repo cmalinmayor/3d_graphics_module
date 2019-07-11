@@ -33,6 +33,7 @@ class App extends Component{
     this.renderer.setClearColor(0x000000)
     this.renderer.setSize(width, height)
     this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.mount.appendChild(this.renderer.domElement)
     
     //ADD PLANE
@@ -62,8 +63,8 @@ class App extends Component{
     var alight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
     this.scene.add(alight);
     
-    //ADD POINT LIGHT
-    var light = new THREE.PointLight( 0xFFFFFF, 1 );
+    //ADD SPOT LIGHT
+    var light = new THREE.SpotLight( 0xFFFFFF, 1 );
     light.position.set(1, -5, 10);
     light.castShadow = true;
     this.scene.add(light);
@@ -84,9 +85,10 @@ class App extends Component{
     cancelAnimationFrame(this.frameId)
   }
   animate = () => {
+    //PAN CAMERA IN CIRCLE AROUND Z AXIS
     this.rotation += 0.01
-    this.camera.position.x = Math.sin(this.rotation)
-    this.camera.position.y = Math.cos(this.rotation)
+    this.camera.position.x = 2 * Math.sin(this.rotation)
+    this.camera.position.y = 2 * Math.cos(this.rotation)
     this.renderScene()
     this.frameId = window.requestAnimationFrame(this.animate)
   }
