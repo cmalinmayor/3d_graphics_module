@@ -26,7 +26,8 @@ class App extends Component{
     this.camera.position.z = 9
     this.camera.lookAt(0, 0, 0)
 
-    var material = THREE.MeshLambertMaterial
+    var shinyMaterial = THREE.MeshStandardMaterial
+    var matteMaterial = THREE.MeshLambertMaterial
 
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -38,14 +39,14 @@ class App extends Component{
     
     //ADD PLANE
     var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
-    var planeMaterial = new material( { color: 0xb69a77, side: THREE.DoubleSide } );
+    var planeMaterial = new matteMaterial( { color: 0xb69a77, side: THREE.DoubleSide } );
     var plane = new THREE.Mesh( planeGeometry, planeMaterial );
     plane.receiveShadow = true;
     this.scene.add( plane );
       
     //ADD CUBE
     const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-    const cubeMaterial = new material({ color: '#433F81' })
+    const cubeMaterial = new shinyMaterial({ color: '#433F81' })
     this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
     this.cube.position.z = 2
     this.cube.receiveShadow = true
@@ -53,14 +54,14 @@ class App extends Component{
     this.scene.add(this.cube)
     
     //ADD SPHERE
-    var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new material({color: 0xFFFFFF}))
+    var sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new shinyMaterial({color: 0xFFFFFF}))
     sphere.position.set(1, 1, 0);
     sphere.castShadow = true
     sphere.receiveShadow = true
     this.scene.add(sphere)
     
     //ADD AMBIENT LIGHT
-    var alight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
+    var alight = new THREE.AmbientLight( 0xFFFFFF, 0.8 );
     this.scene.add(alight);
     
     //ADD SPOT LIGHT
