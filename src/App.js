@@ -90,6 +90,7 @@ class App extends Component{
     this.rotation += 0.01
     this.camera.position.x = 2 * Math.sin(this.rotation)
     this.camera.position.y = 2 * Math.cos(this.rotation)
+    this.camera.lookAt(0, 0, 0)
     this.renderScene()
     this.frameId = window.requestAnimationFrame(this.animate)
   }
