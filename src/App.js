@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import * as THREE from 'three-full';
 
 class App extends Component{
-   state = { loadedMesh: null }
-
    constructor(props) {
     super(props)
+    this.rotation = 0
     this.mount = React.createRef()
   }
 
@@ -19,17 +18,19 @@ class App extends Component{
     
     //ADD CAMERA
     this.camera = new THREE.PerspectiveCamera(
-      65,
+      75,
       width / height,
       0.1,
-      100
+      1000
     )
-    this.camera.position.z = 1.5
+    this.camera.position.z = 10
 
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setClearColor(0x000000)
     this.renderer.setSize(width, height)
+    this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.mount.appendChild(this.renderer.domElement)
     
     // instantiate a loader
@@ -55,18 +56,32 @@ class App extends Component{
         }
     );
     
+    var matteMaterial = THREE.MeshLambertMaterial
+    //ADD PLANE
+    var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
+    var planeMaterial = new matteMaterial( { color: 0xeee5de, side: THREE.DoubleSide } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.receiveShadow = true;
+    this.scene.add( plane );
+      
     //ADD AMBIENT LIGHT
     var alight = new THREE.AmbientLight( 0xFFFFFF, 0.8 );
     this.scene.add(alight);
     
     //ADD SPOT LIGHT
     var light = new THREE.SpotLight( 0xFFFFFF, 1 );
-    light.position.set(10, 35, 25);
+    light.position.set(1, -5, 10);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
     this.scene.add(light);
+    
+    //START ANIMATION
+    this.start()
   }
 
   load_object = (object) => {
-    var material = new THREE.MeshBasicMaterial({color: 'yellow', side: THREE.DoubleSide});
+    var material = new THREE.MeshStandardMaterial({color: 'yellow', side: THREE.DoubleSide});
     object.traverse( (mesh) => {
 
         if (mesh instanceof THREE.Mesh) {
@@ -77,11 +92,13 @@ class App extends Component{
             const size = new THREE.Vector3()
             bbox.getSize(size)
             const max = Math.max(size.x, size.y, size.z)
-            const scale = 1.0 / max
+            const scale = 5.0 / max
             mesh.scale.set(scale, scale, scale)
             // Then update the vertices of the mesh so the center of the bounding box is
             // moved to the origin.
             mesh.geometry.center()
+            mesh.castShadow = true
+            mesh.position.set(0, 0, 5)
             this.scene.add(mesh)
             this.renderer.render(this.scene, this.camera)
             // this.setState({ loadedMesh: mesh})
@@ -91,7 +108,28 @@ class App extends Component{
   }
 
   componentWillUnmount(){
+    this.stop()
     this.mount.removeChild(this.renderer.domElement)
+  }
+  start = () => {
+    if (!this.frameId) {
+      this.frameId = requestAnimationFrame(this.animate)
+    }
+  }
+  stop = () => {
+    cancelAnimationFrame(this.frameId)
+  }
+  animate = () => {
+    //PAN CAMERA IN CIRCLE AROUND Z AXIS
+    this.rotation += 0.01
+    this.camera.position.x = 2 * Math.sin(this.rotation)
+    this.camera.position.y = 2 * Math.cos(this.rotation)
+    this.camera.lookAt(0, 0, 0)
+    this.renderScene()
+    this.frameId = window.requestAnimationFrame(this.animate)
+  }
+  renderScene = () => {
+    this.renderer.render(this.scene, this.camera)
   }
   render(){
     return(
