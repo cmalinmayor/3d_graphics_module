@@ -30,7 +30,7 @@ class App extends Component{
     this.renderer.setClearColor(0x000000)
     this.renderer.setSize(width, height)
     this.renderer.shadowMap.enabled = true;
-    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.mount.appendChild(this.renderer.domElement)
     
     // instantiate a loader
