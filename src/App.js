@@ -61,12 +61,6 @@ class App extends Component{
     );
     
     var matteMaterial = THREE.MeshLambertMaterial
-    //ADD PLANE
-    var planeGeometry = new THREE.PlaneBufferGeometry( 10, 10, 32, 32 );
-    var planeMaterial = new matteMaterial( { color: 0xeee5de, side: THREE.DoubleSide } );
-    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-    plane.receiveShadow = true;
-    this.scene.add( plane );
       
     //ADD AMBIENT LIGHT
     var alight = new THREE.AmbientLight( 0xFFFFFF, 0.8 );
@@ -102,7 +96,7 @@ class App extends Component{
             // moved to the origin.
             mesh.geometry.center()
             mesh.castShadow = true
-            mesh.position.set(0, 0, 5)
+            mesh.position.set(0, 0, 0)
             this.scene.add(mesh)
             this.renderer.render(this.scene, this.camera)
             // this.setState({ loadedMesh: mesh})
