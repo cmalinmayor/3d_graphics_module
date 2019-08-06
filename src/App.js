@@ -24,6 +24,10 @@ class App extends Component{
       1000
     )
     this.camera.position.z = 10
+    
+    //ADD ORBIT CONTROLS
+    this.controls = new THREE.OrbitControls( this.camera )
+    this.controls.addEventListener( 'change', this.renderScene )
 
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -120,11 +124,7 @@ class App extends Component{
     cancelAnimationFrame(this.frameId)
   }
   animate = () => {
-    //PAN CAMERA IN CIRCLE AROUND Z AXIS
-    this.rotation += 0.01
-    this.camera.position.x = 2 * Math.sin(this.rotation)
-    this.camera.position.y = 2 * Math.cos(this.rotation)
-    this.camera.lookAt(0, 0, 0)
+    this.controls.update()
     this.renderScene()
     this.frameId = window.requestAnimationFrame(this.animate)
   }
